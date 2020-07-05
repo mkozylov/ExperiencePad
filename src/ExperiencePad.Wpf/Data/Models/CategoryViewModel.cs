@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -10,50 +11,50 @@ namespace ExperiencePad.Data
     {
         public Guid Id 
         {
-            get { return _category.Id; }
+            get { return _id; }
             set 
             {
-                _category.Id = value;
+                _id = value;
                 OnPropertyChanged();
             }
         }
 
         public Guid? ParentId
         {
-            get { return _category.ParentId; }
+            get { return _parentId; }
             set
             {
-                _category.ParentId = value;
+                _parentId = value;
                 OnPropertyChanged();
             }
         }
 
         public string Name
         {
-            get { return _category.Name; }
+            get { return _name; }
             set
             {
-                _category.Name = value;
+                _name = value;
                 OnPropertyChanged();
             }
         }
 
         public DateTime CreateDate
         {
-            get { return _category.CreateDate; }
+            get { return _createDate; }
             set
             {
-                _category.CreateDate = value;
+                _createDate = value;
                 OnPropertyChanged();
             }
         }
 
         public int Order
         {
-            get { return _category.Order; }
+            get { return _order; }
             set
             {
-                _category.Order = value;
+                _order = value;
                 OnPropertyChanged();
             }
         }
@@ -68,12 +69,22 @@ namespace ExperiencePad.Data
             }
         }
 
-        public CategoryViewModel Parent
+        public bool IsMouseOver
         {
-            get { return _category.Parent; }
+            get { return _isMouseOver; }
             set
             {
-                _category.Parent = value;
+                _isMouseOver = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public CategoryViewModel Parent
+        {
+            get { return _parent; }
+            set
+            {
+                _parent = value;
                 OnPropertyChanged();
             }
         }
@@ -88,19 +99,16 @@ namespace ExperiencePad.Data
             }
         }
 
-        private Category _category;
+        private Guid _id;
+        private Guid? _parentId;
+        private string _name;
+        private DateTime _createDate;
+        private int _order;
         private bool _isSelected;
-        private ObservableCollection<CategoryViewModel> _children;
+        private bool _isMouseOver;
+        private CategoryViewModel _parent;
+        private ObservableCollection<CategoryViewModel> _children = new ObservableCollection<CategoryViewModel>();
 
-        public CategoryViewModel(Category category)
-        {
-            _category = category;
-
-            var childrenCollection = _category.Children
-                                              .Select(x => (CategoryViewModel)x);
-
-            _children = new ObservableCollection<CategoryViewModel>(childrenCollection);
-        }
 
         public static implicit operator Category(CategoryViewModel viewModel)
         {
@@ -109,16 +117,17 @@ namespace ExperiencePad.Data
                 return null;
             }
 
-            viewModel._category.Children = viewModel.Children
-                                                    .Select(x => (Category)x)
-                                                    .ToList();
-
-            return viewModel._category;
+            return viewModel.DeepMap<Category>();
         }
 
         public static implicit operator CategoryViewModel(Category entity)
         {
-            return new CategoryViewModel(entity);
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return entity.DeepMap<CategoryViewModel>();
         }
     }
 }

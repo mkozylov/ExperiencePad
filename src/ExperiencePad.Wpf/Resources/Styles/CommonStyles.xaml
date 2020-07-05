@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:local="clr-namespace:ExperiencePad">
+    <FontFamily x:Key="DefaultFontFamily">pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto</FontFamily>
+    <sys:Double x:Key="DefaultFontSize">14</sys:Double>
+    <SolidColorBrush x:Key="MidRedBrush">#f44336</SolidColorBrush>
+    <SolidColorBrush x:Key="MidGreyBrush">#9e9e9e</SolidColorBrush>
+    <SolidColorBrush x:Key="BlackTextBrush">#000000</SolidColorBrush>
+    <SolidColorBrush x:Key="WhiteTextBrush">#ffffff</SolidColorBrush>
+</ResourceDictionary>

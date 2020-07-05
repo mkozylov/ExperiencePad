@@ -7,38 +7,62 @@
              xmlns:local="clr-namespace:ExperiencePad"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="200"
-             TextElement.FontSize="14"         
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-             FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
              x:Name="Self">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/AppResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!--#region delete record dialog content-->
+            <DockPanel x:Key="DeleteRecordDialog" LastChildFill="True" Margin="16" Height="100" Width="250">
+                <Grid DockPanel.Dock="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            Background="{DynamicResource MidRedBrush}"
+                            Foreground="{DynamicResource WhiteTextBrush}"
+                            IsDefault="True"
+                            Margin="0 8 8 0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                            CommandParameter="{Binding SelectedDialogRecord}">
+                        Удалить
+                    </Button>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Foreground="{StaticResource BlackTextBrush}"
+                            BorderBrush="{StaticResource MidGreyBrush}"
+                            Margin="8 8 0 0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                        Отмена
+                    </Button>
+                </Grid>
+                <TextBlock DockPanel.Dock="Top" 
+                           FontSize="16"
+                           TextWrapping="WrapWithOverflow"
+                           VerticalAlignment="Center"
+                           Text="{Binding StringFormat=Удалить \'{0}\' ?, Path=SelectedDialogRecord.Title}" />
+            </DockPanel>
+            <!--#endregion-->
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <DockPanel Grid.Column="2" HorizontalAlignment="Stretch">
-            <DockPanel DockPanel.Dock="Top" LastChildFill="True">
-                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                    <Button Style="{StaticResource MaterialDesignIconForegroundButton}" Height="20" Width="20">
-                        <materialDesign:PackIcon Kind="Plus" Height="20" Width="20" />
-                    </Button>
-                    <materialDesign:PopupBox 
-                        StaysOpen="False" 
-                        PopupHorizontalOffset="12"
-                        Visibility="{Binding SelectedCategory, Converter={StaticResource RequiredVisibilityConverter}}">
-                        <materialDesign:PopupBox.ToggleContent>
-                            <materialDesign:PackIcon Kind="ArrowDropDown" />
-                        </materialDesign:PopupBox.ToggleContent>
-                     
-                        <StackPanel>
-                            <Button>Создать запись</Button>
-                            <Button>Создать запись в категории</Button>
-                        </StackPanel>
-                    </materialDesign:PopupBox>
-                </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <Border Grid.Row="0"  
+                Visibility="Collapsed">
+            <DockPanel LastChildFill="True">
+                <materialDesign:PackIcon DockPanel.Dock="Right" 
+                                         Kind="Search" 
+                                         Height="20" 
+                                         Width="20" 
+                                         VerticalAlignment="Center" />
                 <TextBox DockPanel.Dock="Left"
                          x:Name="RecordSearch" 
                          materialDesign:HintAssist.Hint="Поиск записей"
@@ -47,10 +71,40 @@
                          Padding="3 0 0 0">
                 </TextBox>
             </DockPanel>
-            <local:RecordList x:Name="RecordList"
-                          Grid.Column="2" 
+        </Border>
+
+        <local:RecordList Grid.Row="1"
+                          x:Name="RecordList"
                           ItemsSource="{Binding Records}" 
+                          BorderThickness="0"
+                          Padding="3 0 3 3"
                           SelectionChanged="RecordList_SelectionChanged" />
-        </DockPanel>
+
+        <Grid Grid.Row="2" Height="54" Background="#eceff1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <materialDesign:ColorZone Grid.Row="1" 
+                                          Mode="PrimaryMid"  
+                                          Height="30" 
+                                          Effect="{DynamicResource MaterialDesignShadowDepth5}">
+                <TextBlock VerticalAlignment="Center"
+                               Margin="10 0 0 0">
+                        Записи
+                </TextBlock>
+            </materialDesign:ColorZone>
+
+            <Button Grid.Row="0"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButtonExt}"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right"
+                        Margin="0 0 10 -21"
+                        IsEnabled="{Binding SelectedCategory, Converter={StaticResource RequiredToBoolConverter}}"
+                        Click="AddRecordButton_Click">
+                <materialDesign:PackIcon Kind="Plus" Height="24" Width="24" />
+            </Button>
+        </Grid>
     </Grid>
 </UserControl>

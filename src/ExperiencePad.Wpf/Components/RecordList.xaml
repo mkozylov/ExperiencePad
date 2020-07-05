@@ -16,18 +16,27 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/AppResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <ContextMenu x:Key="RecordListContextMenu" Style="{StaticResource ContextMenuExt}">
+                <MenuItem Name="Delete" Header="Удалить" Click="ContextMenuItem_Click"/>
+            </ContextMenu>
         </ResourceDictionary>
     </ListView.Resources>
+    <ListBox.ItemContainerStyle>
+        <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItemExt}">
+            <Setter Property="ContextMenu" Value="{StaticResource RecordListContextMenu}" />
+        </Style>
+    </ListBox.ItemContainerStyle>
     <ListView.ItemTemplate>
         <DataTemplate>
-            <StackPanel>
+            <DockPanel LastChildFill="True" Height="Auto" VerticalAlignment="Center">
                 <TextBlock HorizontalAlignment="Stretch" 
                            VerticalAlignment="Center"
-                           Height="Auto"
                            TextWrapping="WrapWithOverflow"
                            TextTrimming="CharacterEllipsis"
+                           MaxWidth="300"
                            Text="{Binding Path=Title}" />
-            </StackPanel>
+            </DockPanel>
         </DataTemplate>
     </ListView.ItemTemplate>
 </ListView>

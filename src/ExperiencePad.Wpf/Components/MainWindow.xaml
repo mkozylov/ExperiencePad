@@ -8,12 +8,16 @@
         xmlns:materialDesignColors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
         xmlns:editing="clr-namespace:ICSharpCode.AvalonEdit.Editing;assembly=ICSharpCode.AvalonEdit"
         xmlns:rendering="clr-namespace:ICSharpCode.AvalonEdit.Rendering;assembly=ICSharpCode.AvalonEdit"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:ExperiencePad" mc:Ignorable="d"
-        Title="MainWindow" WindowStartupLocation="CenterScreen" ShowInTaskbar="true" 
-        Height="800" Width="1000"
-        TextElement.FontSize="14"         
+        Title="ExperiencePad" WindowStartupLocation="CenterScreen" ShowInTaskbar="true" 
+        Icon="/Resources/Images/DefaultIcon.ico"
+        Width="1000" Height="800"
+        TextElement.FontSize="{DynamicResource DefaultFontSize}"         
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        FontFamily="{DynamicResource DefaultFontFamily}"
+        BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+        BorderThickness="0 2 0 0"
         x:Name="Self">
     <Window.Resources>
         <ResourceDictionary>
@@ -22,39 +26,43 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    
-    <Grid Margin="3" VerticalAlignment="Stretch">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
 
-        <!--categoryPanel-->
-        <local:CategoryPanel Grid.Column="0" />
+    <materialDesign:DialogHost CloseOnClickAway="True">
+        <Grid Margin="3" VerticalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="200" MaxWidth="300" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
+            <!--#region category panel -->
+            <local:CategoryPanel Grid.Column="0" />
 
-        <GridSplitter Grid.Column="1" 
-                      ShowsPreview="False" 
-                      Width="3" 
-                      HorizontalAlignment="Center" 
-                      VerticalAlignment="Stretch" />
-        <!--end categoryTree-->
+            <GridSplitter Grid.Column="1" 
+                          Background="{DynamicResource PrimaryHueMidBrush}"
+                          ShowsPreview="False" 
+                          Width="3" 
+                          HorizontalAlignment="Center" 
+                          VerticalAlignment="Stretch" />
+            <!--#endregion-->
 
-        <!--recordList-->
-        <local:RecordPanel Grid.Column="2" />
+            <!--#region record panel -->
+            <local:RecordPanel Grid.Column="2" />
 
-        <GridSplitter Grid.Column="3" 
-                      ShowsPreview="False" 
-                      Width="3" 
-                      HorizontalAlignment="Center" 
-                      VerticalAlignment="Stretch" />
-        <!--end recordList-->
+            <GridSplitter Grid.Column="3" 
+                          Background="{DynamicResource PrimaryHueMidBrush}"
+                          ShowsPreview="False" 
+                          Width="3" 
+                          Margin="0"
+                          HorizontalAlignment="Center" 
+                          VerticalAlignment="Stretch" />
+            <!--#endregion-->
 
-        <!--editor-->
-        <local:EditorPanel Grid.Column="4" />
-        <!--end editor-->
-    </Grid>
+            <!--#region editor panel -->
+            <local:EditorPanel Grid.Column="4" />
+            <!--#endregion-->
+        </Grid>
+    </materialDesign:DialogHost>
 </Window>

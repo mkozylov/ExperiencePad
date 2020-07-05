@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ExperiencePad.Data;
+using System.Collections.ObjectModel;
 
 namespace ExperiencePad
 {
@@ -19,9 +21,20 @@ namespace ExperiencePad
     /// </summary>
     public partial class RecordList : ListView
     {
+        public event EventHandler<RoutedEventArgs> ContextMenuItemClick;
+
         public RecordList()
         {
             InitializeComponent();
         }
+
+        #region Internal
+
+        private void ContextMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ContextMenuItemClick?.Invoke(sender, e);
+        } 
+
+        #endregion
     }
 }

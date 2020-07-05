@@ -9,7 +9,6 @@
              xmlns:materialDesignColors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
              xmlns:local="clr-namespace:ExperiencePad"
              mc:Ignorable="d"
-             Background="#cfd8dc"
              x:Name="Self">
     <TreeView.Resources>
         <ResourceDictionary>
@@ -20,11 +19,12 @@
     </TreeView.Resources>
     <TreeView.Style>
         <Style TargetType="TreeView"  BasedOn="{StaticResource MaterialDesignTreeView}">
+            <Setter Property="Foreground" Value="#FF000000"/>
             <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
             <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
         </Style>
     </TreeView.Style>
-  
+
     <TreeView.ItemTemplate>
         <HierarchicalDataTemplate ItemsSource="{Binding Children}">
             <Border HorizontalAlignment="Stretch" 
@@ -32,22 +32,24 @@
                     Height="34" 
                     Background="Transparent">
                 <Border.ContextMenu>
-                    <ContextMenu Style="{StaticResource ContextMenuExtStyle}">
+                    <ContextMenu Style="{StaticResource ContextMenuExt}">
                         <MenuItem Name="New" Header="Создать подкатегорию" Click="ContextMenuItem_Click"/>
                         <MenuItem Name="Rename" Header="Переименовать" Click="ContextMenuItem_Click"/>
                         <MenuItem Name="Delete" Header="Удалить" Click="ContextMenuItem_Click"/>
                     </ContextMenu>
                 </Border.ContextMenu>
-                <TextBox Background="Transparent"
-                         BorderThickness="0"
-                         IsReadOnly="False"
+                <Grid>
+                    <TextBlock Background="Transparent"
                          TextWrapping="WrapWithOverflow" 
                          VerticalAlignment="Center" 
+                         TextTrimming="CharacterEllipsis"
                          HorizontalAlignment="Left" 
-                         MaxWidth="150"
                          materialDesign:TextFieldAssist.DecorationVisibility="Hidden" 
-                         Text="{Binding Name, Mode=TwoWay}"
-                         PreviewMouseLeftButtonDown="CategoryTextBox_PreviewMouseLeftButtonDown"/>
+                         MaxWidth="300"
+                         Text="{Binding Name, Mode=TwoWay}">
+                    </TextBlock>
+                    <Border Background="Transparent" IsMouseDirectlyOverChanged="TreeItemElement_IsMouseDirectlyOverChanged"></Border>
+                </Grid>
             </Border>
         </HierarchicalDataTemplate>
     </TreeView.ItemTemplate>
@@ -88,9 +90,6 @@
                                     <VisualState Name="Disabled"/>
                                 </VisualStateGroup>
                                 <VisualStateGroup x:Name="SelectionStates">
-                                    <VisualStateGroup.Transitions>
-                                        <VisualTransition GeneratedDuration="0:0:0.6"/>
-                                    </VisualStateGroup.Transitions>
                                     <VisualState Name="Selected">
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetName="SelectedBorder"
@@ -156,27 +155,27 @@
                                       Margin="3 0 3 0"
                                       VerticalAlignment="Center" />
 
-                            <Border x:Name="MouseOverBorder"
-                                Grid.Column="1" Grid.ColumnSpan="2"
+                            <Border x:Name="SelectedBorder"
+                                Grid.Column="0" Grid.ColumnSpan="3"
                                 IsHitTestVisible="False"
                                 Opacity="0"
+                                Margin="-200 0 0 0"
                                 Background="{TemplateBinding Foreground, Converter={StaticResource BrushRoundConverter}}"/>
 
-                            <Border x:Name="SelectedBorder"
-                                Grid.Column="1" Grid.ColumnSpan="2"
-                                IsHitTestVisible="False"
-                                Opacity="0"
-                                Background="{TemplateBinding Foreground, Converter={StaticResource BrushRoundConverter}}"/>
+                            <Border x:Name="MouseOverBorder"
+                                Grid.Column="0" Grid.ColumnSpan="3"
+                                Opacity="0.1"
+                                Margin="-200 0 0 0"
+                                Visibility="{Binding IsMouseOver, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Background="{TemplateBinding Foreground, Converter={StaticResource BrushRoundConverter}}" />
+
+                            <Border x:Name="MouseOverFix"
+                                    Grid.Column="0" Grid.ColumnSpan="3"
+                                    Background="Transparent"
+                                    IsMouseDirectlyOverChanged="TreeItemElement_IsMouseDirectlyOverChanged" />
 
                             <Grid Grid.Column="1" Grid.ColumnSpan="2" x:Name="ContentGrid" Background="Transparent">
-                                <wpf:Ripple Feedback="{TemplateBinding Foreground, Converter={StaticResource BrushRoundConverter}}" 
-                                        Focusable="False"
-                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                        Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter x:Name="PART_Header" ContentSource="Header" />
-                                </wpf:Ripple>
+                                <ContentPresenter x:Name="PART_Header" ContentSource="Header" />
                             </Grid>
 
                             <ContentControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"

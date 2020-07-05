@@ -10,6 +10,14 @@ namespace ExperiencePad.Data
     {
         public IServiceProvider Injector { get; set; }
 
+        public ObservableCollection<string> RecordTypes { get; set; } = new ObservableCollection<string>(new[] 
+        {
+            "text",
+            "c#",
+            "sql",
+            "xml"
+        });
+
         public ObservableCollection<CategoryViewModel> Categories
         {
             get { return _categories; }
@@ -40,19 +48,32 @@ namespace ExperiencePad.Data
             }
         }
 
+        public CategoryViewModel SelectedDialogCategory
+        {
+            get { return _selectedDialogCategory; }
+            set
+            {
+                _selectedDialogCategory = value;
+                OnPropertyChanged();
+            }
+        }
+
         public RecordViewModel SelectedRecord
         {
             get { return _selectedRecord; }
             set
             {
-                if (value != null 
-                    && value.Title == null
-                    && value.Body == null)
-                {
-                    _draftRecord = value;
-                }
+                _selectedRecord = value;
+                OnPropertyChanged();
+            }
+        }
 
-                _selectedRecord = value ?? _draftRecord;
+        public RecordViewModel SelectedDialogRecord
+        {
+            get { return _selectedDialogRecord; }
+            set
+            {
+                _selectedDialogRecord = value;
                 OnPropertyChanged();
             }
         }
@@ -60,14 +81,13 @@ namespace ExperiencePad.Data
         private ObservableCollection<CategoryViewModel> _categories = new ObservableCollection<CategoryViewModel>();
         private ObservableCollection<RecordViewModel> _records = new ObservableCollection<RecordViewModel>();
         private CategoryViewModel _selectedCategory;
+        private CategoryViewModel _selectedDialogCategory;
         private RecordViewModel _selectedRecord;
-        private RecordViewModel _draftRecord = new Record();
+        private RecordViewModel _selectedDialogRecord;
 
         public MainDataContext(IServiceProvider injector)
         {
             Injector = injector;
-
-            _selectedRecord = _draftRecord;
         }
     }
 }

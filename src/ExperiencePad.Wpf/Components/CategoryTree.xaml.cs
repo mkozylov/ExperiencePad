@@ -43,21 +43,14 @@ namespace ExperiencePad
             ContextMenuItemClick?.Invoke(sender, e);
         }
 
-        private void CategoryTextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var dataContext = (MainDataContext)DataContext;
-            var oldCategory = dataContext.SelectedCategory ?? new Category();
-            var newCategory = sender.CastTo<TextBox>()
-                                    .DataContext
-                                    .CastTo<CategoryViewModel>();
-
-            newCategory.IsSelected = true;
-
-            //OnSelectedItemChanged(
-            //    new RoutedPropertyChangedEventArgs<object>(oldCategory, newCategory, SelectedItemChangedEvent)
-            //    );
-        }
-
         #endregion
+
+        private void TreeItemElement_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var element = (FrameworkElement)sender;
+            var category = (CategoryViewModel)element.DataContext;
+
+            category.IsMouseOver = (bool)e.NewValue;
+        }
     }
 }

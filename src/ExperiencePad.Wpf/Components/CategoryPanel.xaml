@@ -4,40 +4,129 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:ExperiencePad"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             TextElement.FontSize="14"         
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-             FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+             d:DesignHeight="100" d:DesignWidth="150"
              x:Name="Self">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/AppResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!--#region new category dialog content-->
+            <DockPanel x:Key="NewCategoryDialog" LastChildFill="True" Margin="16" Height="100" Width="250">
+                <Grid DockPanel.Dock="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            IsDefault="True"
+                            Margin="0 8 8 0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                            CommandParameter="{Binding SelectedDialogCategory}">
+                        Сохранить
+                    </Button>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Foreground="{StaticResource BlackTextBrush}"
+                            BorderBrush="{StaticResource MidGreyBrush}"
+                            Margin="8 8 0 0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                        Отмена
+                    </Button>
+                </Grid>
+                <TextBox DockPanel.Dock="Top" 
+                         FontSize="16"
+                         TextWrapping="WrapWithOverflow"
+                         VerticalAlignment="Center"
+                         materialDesign:HintAssist.Hint="Имя категории"
+                         Text="{Binding SelectedDialogCategory.Name, Mode=TwoWay}" />
+            </DockPanel>
+            <!--#endregion-->
+
+            <!--#region rename category dialog content-->
+            <DockPanel x:Key="RenameCategoryDialog" LastChildFill="True" Margin="16" Height="100" Width="250">
+                <Grid DockPanel.Dock="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            IsDefault="True"
+                            Margin="0 8 8 0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                            CommandParameter="{Binding SelectedDialogCategory}">
+                        Сохранить
+                    </Button>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Foreground="{StaticResource BlackTextBrush}"
+                            BorderBrush="{StaticResource MidGreyBrush}"
+                            Margin="8 8 0 0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                        Отмена
+                    </Button>
+                </Grid>
+                <TextBox DockPanel.Dock="Top" 
+                         FontSize="16"
+                         TextWrapping="WrapWithOverflow"
+                         VerticalAlignment="Center"
+                         materialDesign:HintAssist.Hint="Имя категории"
+                         Text="{Binding SelectedDialogCategory.Name, Mode=TwoWay}" />
+            </DockPanel>
+            <!--#endregion-->
+
+            <!--#region delete category dialog content-->
+            <DockPanel x:Key="DeleteCategoryDialog" LastChildFill="True" Margin="16" Height="100" Width="250">
+                <Grid DockPanel.Dock="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            Background="{DynamicResource MidRedBrush}"
+                            Foreground="{DynamicResource WhiteTextBrush}"
+                            IsDefault="True"
+                            Margin="0 8 8 0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                            CommandParameter="{Binding SelectedDialogCategory}">
+                        Удалить
+                    </Button>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Foreground="{StaticResource BlackTextBrush}"
+                            BorderBrush="{StaticResource MidGreyBrush}"
+                            Margin="8 8 0 0"
+                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                        Отмена
+                    </Button>
+                </Grid>
+                <TextBlock DockPanel.Dock="Top" 
+                           FontSize="16"
+                           TextWrapping="WrapWithOverflow"
+                           VerticalAlignment="Center"
+                           Text="{Binding StringFormat=Удалить \'{0}\' ?, Path=SelectedDialogCategory.Name}" />
+            </DockPanel>
+            <!--#endregion-->
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <DockPanel HorizontalAlignment="Stretch">
-            <DockPanel DockPanel.Dock="Top" LastChildFill="True">
-                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                    <Button Style="{StaticResource MaterialDesignIconForegroundButton}" Height="20" Width="20">
-                        <materialDesign:PackIcon Kind="Plus" Height="20" Width="20" />
-                    </Button>
-                    <materialDesign:PopupBox 
-                        StaysOpen="False" 
-                        PopupHorizontalOffset="12"
-                        Visibility="{Binding SelectedCategory, Converter={StaticResource RequiredVisibilityConverter}}">
-                        <materialDesign:PopupBox.ToggleContent>
-                            <materialDesign:PackIcon Kind="ArrowDropDown" />
-                        </materialDesign:PopupBox.ToggleContent>
-                        <StackPanel>
-                            <Button>Создать категорию</Button>
-                            <Button>Создать подкатегорию</Button>
-                        </StackPanel>
-                    </materialDesign:PopupBox>
-                </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" 
+                Visibility="Collapsed">
+            <DockPanel  LastChildFill="True">
+                <materialDesign:PackIcon DockPanel.Dock="Right" 
+                                         Kind="Search" 
+                                         Height="20"
+                                         Width="20" 
+                                         VerticalAlignment="Center" />
                 <TextBox DockPanel.Dock="Left"
                          x:Name="CategorySearch" 
                          materialDesign:HintAssist.Hint="Поиск категорий"
@@ -46,11 +135,41 @@
                          Padding="3 0 0 0">
                 </TextBox>
             </DockPanel>
-            <local:CategoryTree x:Name="CategoryTree"
-                                x:FieldModifier="public"
-                                ItemsSource="{Binding Categories, Mode=TwoWay}" 
-                                SelectedItemChanged="CategoryTree_SelectedItemChanged">
-            </local:CategoryTree>
-        </DockPanel>
+        </Border>
+
+        <local:CategoryTree Grid.Row="1"
+                            x:Name="CategoryTree"
+                            x:FieldModifier="public"
+                            Background="#eceff1"
+                            Padding="0 0 3 3"
+                            ItemsSource="{Binding Categories, Mode=TwoWay}" 
+                            SelectedItemChanged="CategoryTree_SelectedItemChanged">
+        </local:CategoryTree>
+
+        <Grid Grid.Row="2" Height="54" Background="#eceff1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <materialDesign:ColorZone Grid.Row="1" 
+                                          Mode="PrimaryMid"  
+                                          Height="30" 
+                                          Effect="{DynamicResource MaterialDesignShadowDepth5}">
+                <TextBlock VerticalAlignment="Center"
+                               Margin="10 0 0 0">
+                        Категории
+                </TextBlock>
+            </materialDesign:ColorZone>
+
+            <Button Grid.Row="0"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right"
+                        Margin="0 0 10 -21"
+                        Click="AddCategoryButton_Click">
+                <materialDesign:PackIcon Kind="Plus" Height="24" Width="24" />
+            </Button>
+        </Grid>
     </Grid>
 </UserControl>

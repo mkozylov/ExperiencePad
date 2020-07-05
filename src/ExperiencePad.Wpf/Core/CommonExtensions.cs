@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using NWrath.Synergy.Common.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -22,5 +24,20 @@ namespace ExperiencePad
                    ?? obj.ToString();
         }
 
+        public static T DeepMap<T>(this object obj)
+        {
+            var json = JsonConvert.SerializeObject(obj, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+
+            return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        public static string ToSql(this IEnumerable<Guid> collection)
+        {
+            return collection.Select(x => $"'{x}'")
+                             .StringJoin();
+        }
     }
 }

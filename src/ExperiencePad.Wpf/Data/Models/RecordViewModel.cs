@@ -8,90 +8,111 @@ namespace ExperiencePad.Data
     {
         public Guid Id
         {
-            get { return _record.Id; }
+            get { return _id; }
             set
             {
-                _record.Id = value;
+                _id = value;
                 OnPropertyChanged();
             }
         }
 
         public Guid? CategoryId
         {
-            get { return _record.CategoryId; }
+            get { return _categoryId; }
             set
             {
-                _record.CategoryId = value;
+                _categoryId = value;
                 OnPropertyChanged();
             }
         }
 
         public DateTime CreateDate
         {
-            get { return _record.CreateDate; }
+            get { return _createDate; }
             set
             {
-                _record.CreateDate = value;
+                _createDate = value;
                 OnPropertyChanged();
             }
         }
 
         public int Order
         {
-            get { return _record.Order; }
+            get { return _order; }
             set
             {
-                _record.Order = value;
+                _order = value;
                 OnPropertyChanged();
             }
         }
 
         public string Title
         {
-            get { return _record.Title; }
+            get { return _title; }
             set
             {
-                _record.Title = value;
+                _title = value;
                 OnPropertyChanged();
             }
         }
 
         public string Body
         {
-            get { return _record.Body; }
+            get { return _body; }
             set
             {
-                _record.Body = value;
+                _body = value;
                 OnPropertyChanged();
             }
         }
 
         public string Type
         {
-            get { return _record.Type; }
+            get { return _type; }
             set
             {
-                _record.Type = value;
+                _type = value;
                 OnPropertyChanged();
             }
         }
 
-
-        private Record _record;
-
-        public RecordViewModel(Record record)
+        public bool IsSelected
         {
-            _record = record;
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged();
+            }
         }
+
+        private Guid _id;
+        private Guid? _categoryId;
+        private string _title;
+        private string _body;
+        private DateTime _createDate;
+        private int _order;
+        private string _type = "text";
+        private bool _isSelected;
 
         public static implicit operator Record(RecordViewModel viewModel)
         {
-            return viewModel._record;
+            if (viewModel == null)
+            {
+                return null;
+            }
+
+            return viewModel.DeepMap<Record>();
         }
 
         public static implicit operator RecordViewModel(Record entity)
         {
-            return new RecordViewModel(entity);
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return entity.DeepMap<RecordViewModel>();
         }
     }
 }

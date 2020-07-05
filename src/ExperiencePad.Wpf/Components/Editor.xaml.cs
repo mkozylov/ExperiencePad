@@ -14,6 +14,11 @@ using System.Windows.Shapes;
 using ICSharpCode.AvalonEdit;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using ICSharpCode.AvalonEdit.Highlighting;
+using System.IO;
+using System.Reflection;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using NWrath.Synergy.Common.Extensions;
 
 namespace ExperiencePad
 {
@@ -48,9 +53,43 @@ namespace ExperiencePad
         public Editor()
         {
             InitializeComponent();
+
+            Loaded += Editor_Loaded;
         }
 
         #region Internal
+
+        private void Editor_Loaded(object sender, RoutedEventArgs e)
+        {
+            var lineNumberMargin = (Line)TextArea.LeftMargins[1];
+            lineNumberMargin.Margin = new Thickness(20, 0, 0, 0);
+
+            TextArea.Options.HighlightCurrentLine = true;
+            TextArea.Options.EnableHyperlinks = true;
+            
+            RegisterHighlightingDefinitions();
+        }
+
+        private void RegisterHighlightingDefinitions()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var definitionNames = assembly.GetManifestResourceNames()
+                                          .Where(x => x.EndsWith(".xshd"));
+
+            foreach (var fullName in definitionNames)
+            {
+                using var stream = assembly.GetManifestResourceStream(fullName);
+                using var reader = new System.Xml.XmlTextReader(stream);
+
+                var name = fullName.Split('.').Extract(s => s[s.Length - 2]);
+
+                HighlightingManager.Instance.RegisterHighlighting(
+                    name,
+                    new string[0],
+                    HighlightingLoader.Load(reader, HighlightingManager.Instance)
+                    );
+            }
+        }
 
         protected static void OnTextPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {

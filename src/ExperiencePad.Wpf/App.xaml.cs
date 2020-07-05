@@ -29,7 +29,7 @@ namespace ExperiencePad
             injector.BindProperties(window);
 
             window.DataContext = injector.GetRequiredService<MainDataContext>();
-
+            
             window.ShowDialog();
         }
 

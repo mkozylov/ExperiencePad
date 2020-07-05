@@ -7,7 +7,7 @@
         <ResourceDictionary Source="../MaterialDesign.xaml" />
     </ResourceDictionary.MergedDictionaries>
     
-    <Style x:Key="ContextMenuExtStyle" TargetType="{x:Type ContextMenu}" BasedOn="{StaticResource MaterialDesignMenu}">
+    <Style x:Key="ContextMenuExt" TargetType="{x:Type ContextMenu}" BasedOn="{StaticResource MaterialDesignMenu}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type MenuBase}">
