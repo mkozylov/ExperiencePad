@@ -53,6 +53,13 @@ namespace ExperiencePad
         private void CategoryTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var category = (CategoryViewModel)e.NewValue;
+
+            if (category == null)
+            {
+                MainDataContext.SelectedCategory = null;
+                return;
+            }
+
             var records = DataManager.GetCategoryRecords(category.Id);
 
             MainDataContext.SelectedCategory.If(p => p != null, t => t.IsSelected = false);

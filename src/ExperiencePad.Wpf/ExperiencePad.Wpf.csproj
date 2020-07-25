@@ -47,7 +47,7 @@
   
   <ItemGroup>
     <None Update="storage.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   
